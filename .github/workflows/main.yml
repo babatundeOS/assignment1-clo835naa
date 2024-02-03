@@ -69,7 +69,7 @@ jobs:
         echo "push done"
         
         # Unit test
-        docker ru -p 8080:8080  -e DBHOST=$DBHOST \
+        docker run -p 8080:8080  -e DBHOST=$DBHOST \
           -e DBPORT=$DBPORT -e  DBUSER=$DBUSER \
           -e DBPWD=$DBPWD $ECR_REGISTRY/$ECR_REPOSITORY_APP
         echo "App 0 container run complete"
