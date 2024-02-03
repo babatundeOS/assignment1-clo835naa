@@ -40,7 +40,8 @@ jobs:
         ls -ltra
         
         #docker build mysql
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_DB .
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_DB -f Dockerfile_mysql .
+        #docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_DB .
         echo "Mysql build complete"
 
         #push docker image to registory
