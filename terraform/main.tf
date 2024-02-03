@@ -1,44 +1,20 @@
-# main.tf 
+# main.tf
 
 provider "aws" {
-  region = "us-east-1" # Change this to your desired AWS region
+  region = var.aws_region
 }
 
-# Create VPC with a public subnet
-resource "aws_vpc" "my_vpc" {
-  cidr_block = "10.0.0.0/16"
-  enable_dns_support = true
-  enable_dns_hostnames = true
-
-  tags = {
-    Name = "my-vpc"
-  }
-}
-
-resource "aws_subnet" "public_subnet" {
-  vpc_id                  = aws_vpc.my_vpc.id
-  cidr_block              = "10.0.1.0/24"
-  availability_zone       = "us-east-1a" # Change this to your desired availability zone
-  map_public_ip_on_launch = true
-
-  tags = {
-    Name = "public-subnet"
-  }
-}
-
-# Create an EC2 instance in the public subnet
-resource "aws_instance" "my_instance" {
+resource "aws_instance" "my_ec2_instance" {
   ami           = "ami-0ff8a91507f77f867"
   instance_type = "t2.micro"
-  subnet_id     = aws_subnet.public_subnet.id
-
+  #security_groups = [aws_security_group.my_security_group.id]
+  key_name      = aws_key_pair.my_key.key_name
+  
   tags = {
-    Name = "my-instance"
+    Name = "assignment1instance"
   }
+  
 }
-
-
-# Create an Elastic Container Registry (ECR)
 
 resource "aws_ecr_repository" "ecr_assignment1_db_repo" {
   name = "ecr_assignment1_db_repo"
@@ -49,3 +25,35 @@ resource "aws_ecr_repository" "ecr_assignment1_app_repo" {
   name = "ecr_assignment1_app_repo"
   image_tag_mutability = "MUTABLE"
 }
+
+resource "aws_security_group" "my_security_group" {
+  name        = "my-security-group"
+  description = "Allow inbound traffic on specified ports"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 8080
+    to_port     = 8083
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_key_pair" "my_key" {
+  key_name   = "my-key"
+  public_key = file(var.public_key_path)
+}
+
