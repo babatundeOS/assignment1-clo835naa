@@ -94,7 +94,8 @@ jobs:
           $ECR_REGISTRY/$ECR_REPOSITORY_APP
           
         echo "App 3 container run complete"
-        echo "Public IP: {{curl ifconfig.me}}"
+        echo "Public IP below:"
+        curl ifconfig.me
           
         docker ps
         echo "All done now"
