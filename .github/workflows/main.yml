@@ -41,27 +41,33 @@ jobs:
         
         #docker build mysql
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_DB .
+        echo "Mysql build complete"
         
         # Docker build
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_APP:$IMAGE_TAG .
+        echo "App build complete"
         
         # Unit test
         docker run -p 8080:8080  -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e DBPWD=$DBPWD  --name my_app $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "Mysql container run complete"
         
         docker run -d -p 8081:80 --name app_container1 \
           -e DBHOST=$DBHOST_CONTAINER1 \
           -e APP_COLOR=$APP_COLOR_CONTAINER1 \
           my_app
+        echo "App 1 container run complete"
         
         docker run -d -p 8082:80 --name app_container2 \
           -e DBHOST=$DBHOST_CONTAINER2 \
           -e APP_COLOR=$APP_COLOR_CONTAINER2 \
           my_app
+        echo "App 2 container run complete"
 
         docker run -d -p 8083:80 --name app_container3 \
           -e DBHOST=$DBHOST_CONTAINER3 \
           -e APP_COLOR=$APP_COLOR_CONTAINER3 \
           my_app
+        echo "App 3 container run complete"
           
         docker ps
         echo "Pause for 10 seconds to let container start"
@@ -69,3 +75,4 @@ jobs:
         curl localhost -vvv
         docker push $ECR_REGISTRY/$ECR_REPOSITORY_APP:$IMAGE_TAG
         docker push $ECR_REGISTRY/$ECR_REPOSITORY_DB:$IMAGE_TAG
+        echo "push done"
