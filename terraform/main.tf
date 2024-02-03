@@ -40,12 +40,12 @@ resource "aws_instance" "my_instance" {
 
 # Create an Elastic Container Registry (ECR)
 
-resource "aws_ecr_repository" "ecr_db_repo" {
-  name = "ecr_db_repo"
+resource "aws_ecr_repository" "ecr_assignment1_db_repo" {
+  name = "ecr_assignment1_db_repo"
   image_tag_mutability = "MUTABLE" 
 }
 
-resource "aws_ecr_repository" "ecr_app_repo" {
-  name = "ecr_app_repo"
+resource "aws_ecr_repository" "ecr_assignment1_app_repo" {
+  name = "ecr_assignment1_app_repo"
   image_tag_mutability = "MUTABLE"
 }
