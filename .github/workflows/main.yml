@@ -43,8 +43,12 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_DB .
         echo "Mysql build complete"
 
+        #puch docker image to registory
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY_DB:$IMAGE_TAG
+        echo "Mysql puch to ecr complete"
+
         # run mysql container
-        docker run -d -e MYSQL_ROOT_PASSWORD=pw  my_db
+        docker run -d -e MYSQL_ROOT_PASSWORD=pw $ECR_REGISTRY/$ECR_REPOSITORY_DB:$IMAGE_TAG
         echo "Mysql container complete"
 
         #export variables
@@ -86,5 +90,4 @@ jobs:
         sleep 10
         curl localhost -vvv
         docker push $ECR_REGISTRY/$ECR_REPOSITORY_APP:$IMAGE_TAG
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY_DB:$IMAGE_TAG
         echo "push done"
