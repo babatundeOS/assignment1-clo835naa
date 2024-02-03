@@ -69,26 +69,26 @@ jobs:
         echo "push done"
         
         # Unit test
-        docker run -d -p 8080:8080  -e DBHOST=$DBHOST \
+        docker ru -p 8080:8080  -e DBHOST=$DBHOST \
           -e DBPORT=$DBPORT -e  DBUSER=$DBUSER \
           -e DBPWD=$DBPWD $ECR_REGISTRY/$ECR_REPOSITORY_APP
         echo "App 0 container run complete"
         
-        docker run -d -p 8081:8080 --name app_container1 \
+        docker run -p 8081:8080 --name app_container1 \
           -e DBHOST=$DBHOST_CONTAINER1 \
           -e APP_COLOR=$APP_COLOR_CONTAINER1 \
           $ECR_REGISTRY/$ECR_REPOSITORY_APP
           
         echo "App 1 container run complete"
         
-        docker run -d -p 8082:8080 --name app_container2 \
+        docker run -p 8082:8080 --name app_container2 \
           -e DBHOST=$DBHOST_CONTAINER2 \
           -e APP_COLOR=$APP_COLOR_CONTAINER2 \
           $ECR_REGISTRY/$ECR_REPOSITORY_APP
           
         echo "App 2 container run complete"
 
-        docker run -d -p 8083:8080 --name app_container3 \
+        docker run -p 8083:8080 --name app_container3 \
           -e DBHOST=$DBHOST_CONTAINER3 \
           -e APP_COLOR=$APP_COLOR_CONTAINER3 \
           $ECR_REGISTRY/$ECR_REPOSITORY_APP
