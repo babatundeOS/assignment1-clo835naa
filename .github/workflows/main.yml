@@ -40,7 +40,7 @@ jobs:
         ls -ltra
         
         #docker build mysql
-        docker build -t $ECR_REGISTRY/ECR_REPOSITORY_DB .
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_DB .
         
         # Docker build
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_APP:$IMAGE_TAG .
