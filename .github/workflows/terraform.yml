@@ -80,7 +80,7 @@ jobs:
   
     # Navigate to terrafom directory
     - name: Navigate to terrafom directory
-      run:  cd ${{ github.workspace }}/terraform
+      run:  cd terraform
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
