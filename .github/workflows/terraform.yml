@@ -76,6 +76,7 @@ jobs:
     # Navigate to terrafom directory
     - name: Navigate to terrafom directory
       run:  cd terraform
+      echo "Current working directory $(pwd)"
 
     # pwd
     - name: print wd
