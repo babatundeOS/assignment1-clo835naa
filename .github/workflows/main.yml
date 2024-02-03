@@ -64,7 +64,7 @@ jobs:
         echo "App build complete"
         
         # Unit test
-        docker run -p 8080:8080  -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e DBPWD=$DBPWD  --name $ECR_REGISTRY/$ECR_REPOSITORY_APP
+        docker run -d -p 8080:8080  -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e DBPWD=$DBPWD $ECR_REGISTRY/$ECR_REPOSITORY_APP
         echo "App 0 container run complete"
         
         docker run -d -p 8081:80 --name app_container1 \
