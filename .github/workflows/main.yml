@@ -43,7 +43,7 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_DB .
         echo "Mysql build complete"
 
-        #puch docker image to registory
+        #push docker image to registory
         docker push $ECR_REGISTRY/$ECR_REPOSITORY_DB
         echo "Mysql push to ecr complete"
 
@@ -59,13 +59,13 @@ jobs:
         export DBPWD=pw
         export APP_COLOR=blue
         
-        # Docker build
+        # Docker build app
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_APP .
         echo "App build complete"
         
         # Unit test
-        docker run -p 8080:8080  -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e DBPWD=$DBPWD  --name my_app $ECR_REGISTRY/$ECR_REPOSITORY
-        echo "Mysql container run complete"
+        docker run -p 8080:8080  -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e DBPWD=$DBPWD  --name $ECR_REGISTRY/$ECR_REPOSITORY_APP
+        echo "App 0 container run complete"
         
         docker run -d -p 8081:80 --name app_container1 \
           -e DBHOST=$DBHOST_CONTAINER1 \
