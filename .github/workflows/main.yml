@@ -62,6 +62,10 @@ jobs:
         # Docker build app
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_APP .
         echo "App build complete"
+
+        #Docjer container app push to ecr
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY_APP
+        echo "push done"
         
         # Unit test
         docker run -d -p 8080:8080  -e DBHOST=$DBHOST \
@@ -91,8 +95,5 @@ jobs:
         echo "App 3 container run complete"
           
         docker ps
-        echo "Pause for 10 seconds to let container start"
-        sleep 10
-        curl localhost -vvv
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY_APP
-        echo "push done"
+        echo "All done now"
+       
