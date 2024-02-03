@@ -30,7 +30,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY_APP: ecr_assignment1_app_repo
-        ECR_REPOSITORY_DB: my_db
+        ECR_REPOSITORY_DB: ecr_assignment1_db_repo
         IMAGE_TAG: v0.1 
         APP_COLOR_CONTAINER1: "blue"
         APP_COLOR_CONTAINER2: "pink"
