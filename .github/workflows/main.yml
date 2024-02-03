@@ -43,6 +43,10 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_DB .
         echo "Mysql build complete"
 
+        # run mysql container
+        docker run -d -e MYSQL_ROOT_PASSWORD=pw  my_db
+        echo "Mysql container complete"
+
         #export variables
         export DBHOST=172.17.0.2
         export DBPORT=3306
