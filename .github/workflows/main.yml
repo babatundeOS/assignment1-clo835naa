@@ -1,0 +1,70 @@
+name: Deploy to ECR
+
+on: 
+  push:
+    branches: [ main ]
+
+jobs:
+  
+  build:
+    
+    name: Build Image
+    runs-on: ubuntu-latest
+
+   
+    steps:
+
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+        AWS_REGION: us-east-1
+
+    - name: Build, test, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: assignment1-ecr-repo
+        ECR_REPOSITORY_DB: my_db
+        IMAGE_TAG: v0.1 
+        APP_COLOR_CONTAINER1: "blue"
+        APP_COLOR_CONTAINER2: "pink"
+        APP_COLOR_CONTAINER3: "lime"
+      run: |
+        cd app/
+        ls -ltra
+        
+        #docker build mysql
+        docker build -t ECR_REGISTRY/ECR_REPOSITORY_DB .
+        
+        # Docker build
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        
+        # Unit test
+        docker run -p 8080:8080  -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e DBPWD=$DBPWD  --name my_app $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        
+        docker run -d -p 8081:80 --name app_container1 \
+          -e DBHOST=$DBHOST_CONTAINER1 \
+          -e APP_COLOR=$APP_COLOR_CONTAINER1 \
+          my_app
+        
+        docker run -d -p 8082:80 --name app_container2 \
+          -e DBHOST=$DBHOST_CONTAINER2 \
+          -e APP_COLOR=$APP_COLOR_CONTAINER2 \
+          my_app
+
+        docker run -d -p 8083:80 --name app_container3 \
+          -e DBHOST=$DBHOST_CONTAINER3 \
+          -e APP_COLOR=$APP_COLOR_CONTAINER3 \
+          my_app
+          
+        docker ps
+        echo "Pause for 10 seconds to let container start"
+        sleep 10
+        curl localhost -vvv
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
