@@ -96,7 +96,9 @@ jobs:
         echo "App 3 container run complete"
         echo "Public IP below:"
         curl ifconfig.me
-          
+        wget -qO- ifconfig.me
+
+        echo "Before docker ps"
         docker ps
         echo "All done now"
        
