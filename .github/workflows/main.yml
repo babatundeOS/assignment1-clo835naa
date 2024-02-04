@@ -16,6 +16,11 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
 
+    - name: Set timezone to Toronto
+      run: |
+        sudo ln -fs /usr/share/zoneinfo/America/Toronto /etc/localtime
+        echo "Current datetime: $(date)"
+
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
