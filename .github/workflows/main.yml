@@ -49,66 +49,54 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:"${IMAGE_TAG}" -f Dockerfile_mysql .
         echo "Mysql build complete"
 
-        #push docker image to registory
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:"${IMAGE_TAG}"
-        echo "Mysql push to ecr complete"
-
         # run mysql container
         docker run -d --name mysql_db -e MYSQL_ROOT_PASSWORD=pw $ECR_REGISTRY/$ECR_REPOSITORY:"${IMAGE_TAG}"
         docker ps
         echo "Sleep for 10s then... Showing list of databases in MYSQL:"
         sleep 10
         docker exec mysql_db mysql -ppw -e "show databases;"
+
+        #push docker image to registory
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:"${IMAGE_TAG}"
+        echo "Mysql push to ecr complete"
+        
         echo "Mysql container complete"
 
+
+        # Docker BUILD WEBAPP ====
         #export variables
-        export DBHOST=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' my_db`
+        export DBHOST=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mysql_db`
         export DBPORT=3306
         export DBUSER=root
         export DATABASE=employees
         export DBPWD=pw
         export APP_COLOR=blue
         
-        # Docker build app
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:"${IMAGE_TAG}" .
-        echo "App build complete"
+        IMAGE_TAG=webapp-$(date +"%H%M%S")
+        echo "IMAGE_TAG: $IMAGE_TAG"
 
-        #Docjer container app push to ecr
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:"${IMAGE_TAG}"
-        echo "push done"
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:"${IMAGE_TAG}" -f Dockerfile .
+        echo "App build complete"
         
         # Unit test
         docker run -d -p 8080:8080  -e DBHOST=$DBHOST \
           -e DBPORT=$DBPORT -e  DBUSER=$DBUSER \
+          -e APP_COLOR=$APP_COLOR \
           -e DBPWD=$DBPWD $ECR_REGISTRY/$ECR_REPOSITORY
         echo "App 0 container run complete"
 
-        - >
-          docker run -d -p 8081:8080 --name app_container1 \
-            -e DBHOST=$DBHOST_CONTAINER1 \
-            -e APP_COLOR=$APP_COLOR_CONTAINER1 \
-            $ECR_REGISTRY/$ECR_REPOSITORY
-            
-          echo "App 1 container run complete"
-          
-          docker run -d -p 8082:8080 --name app_container2 \
-            -e DBHOST=$DBHOST_CONTAINER2 \
-            -e APP_COLOR=$APP_COLOR_CONTAINER2 \
-            $ECR_REGISTRY/$ECR_REPOSITORY
-            
-          echo "App 2 container run complete"
-  
-          docker run -d -p 8083:8080 --name app_container3 \
-            -e DBHOST=$DBHOST_CONTAINER3 \
-            -e APP_COLOR=$APP_COLOR_CONTAINER3 \
-            $ECR_REGISTRY/$ECR_REPOSITORY
-            
-          echo "App 3 container run complete"
+        docker ps
+        
         echo "Public IP below:"
         curl ifconfig.me
         wget -qO- ifconfig.me
 
         echo "Before docker ps"
         docker ps
+
+        #Docker container app push to ecr
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:"${IMAGE_TAG}"
+        echo "push done"
+        
         echo "All done now"
        
