@@ -11,6 +11,10 @@ jobs:
     name: Build Image
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/app
+
     steps:
 
     - name: Check out code
