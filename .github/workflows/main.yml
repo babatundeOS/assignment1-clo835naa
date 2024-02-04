@@ -48,6 +48,7 @@ jobs:
 
         # run mysql container
         docker run -d --name mysql_db -e MYSQL_ROOT_PASSWORD=pw $ECR_REGISTRY/$ECR_REPOSITORY_DB
+        docker ps
         echo "Showing list of databases in MYSQL:"
         docker exec mysql_db mysql -ppw -e "show databases;"
         echo "Mysql container complete"
