@@ -40,6 +40,7 @@ jobs:
         ECR_REPOSITORY: ecr_assignment1_repo
         #IMAGE_TAG: v0.2
       run: |
+        cd app/
         # Generate IMAGE_TAG using current date and time
         IMAGE_TAG=mysql-$(date +"%Y%m%d%H%M%S")
         echo "IMAGE_TAG: $IMAGE_TAG"
@@ -62,6 +63,7 @@ jobs:
         ECR_REPOSITORY: ecr_assignment1_repo
         #IMAGE_TAG: v0.2
       run: |
+        cd app/
         # Generate IMAGE_TAG using current date and time
         IMAGE_TAG=WebAPP-$(date +"%Y%m%d%H%M%S")
         echo "IMAGE_TAG: $IMAGE_TAG"
