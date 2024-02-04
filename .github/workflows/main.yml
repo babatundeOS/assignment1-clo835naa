@@ -47,9 +47,9 @@ jobs:
         echo "Mysql push to ecr complete"
 
         # run mysql container
-        docker run -d -e MYSQL_ROOT_PASSWORD=pw $ECR_REGISTRY/$ECR_REPOSITORY_DB
+        docker run -d --name mysql_db -e MYSQL_ROOT_PASSWORD=pw $ECR_REGISTRY/$ECR_REPOSITORY_DB
         echo "Showing list of databases in MYSQL:"
-        docker exec mysql mysql -ppw -e "show databases;"
+        docker exec mysql_db mysql -ppw -e "show databases;"
         echo "Mysql container complete"
 
         #export variables
