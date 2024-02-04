@@ -79,11 +79,8 @@ jobs:
         echo "App build complete"
         
         # Unit test
-        docker run -d -p 8080:8080  -e DBHOST=$DBHOST \
-          -e DBPORT=$DBPORT -e  DBUSER=$DBUSER \
-          -e APP_COLOR=$APP_COLOR \
-          -e DBPWD=$DBPWD $ECR_REGISTRY/$ECR_REPOSITORY:"${IMAGE_TAG}"
-        echo "App 0 container run complete"
+        docker run -d -p 8080:8080  -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e APP_COLOR=$APP_COLOR -e DBPWD=$DBPWD -e DATABASE=$DATABASE $ECR_REGISTRY/$ECR_REPOSITORY:"${IMAGE_TAG}"
+        echo "App 8080 container run complete"
 
         docker ps
         
