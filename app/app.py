@@ -7,14 +7,12 @@ import argparse
 
 app = Flask(__name__)
 
-DBHOST = "172.17.0.2"
-#DBHOST = os.environ.get("DBHOST") or "localhost"
+DBHOST = os.environ.get("DBHOST") or "localhost"
 DBUSER = os.environ.get("DBUSER") or "root"
-DBPWD = os.environ.get("DBPWD") or "pw"
+DBPWD = os.environ.get("DBPWD") or "passwors"
 DATABASE = os.environ.get("DATABASE") or "employees"
 COLOR_FROM_ENV = os.environ.get('APP_COLOR') or "lime"
-#DBPORT = int(os.environ.get("DBPORT")) or "3307"
-DBPORT = 3306
+DBPORT = int(os.environ.get("DBPORT"))
 
 # Create a connection to the MySQL database
 db_conn = connections.Connection(
@@ -51,6 +49,15 @@ COLOR = random.choice(["red", "green", "blue", "blue2", "darkblue", "pink", "lim
 def home():
     return render_template('addemp.html', color=color_codes[COLOR])
 
+# Catch-all route
+@app.route('/<path:path>', methods=['GET', 'POST'])
+def catch_all(path):
+    # You can either redirect to the home page
+    # return redirect(url_for('home'))
+
+    # Or render the same template as the home page
+    return render_template('addemp.html', color=color_codes[COLOR])
+    
 @app.route("/about", methods=['GET','POST'])
 def about():
     return render_template('about.html', color=color_codes[COLOR])
