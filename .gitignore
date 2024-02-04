@@ -2,4 +2,5 @@
 terraform/.git/
 terraform/.terraform/
 terraform/.terraform.*
-terraform/my_key*
+terraform/my-key*
+terraform/my-key.*
