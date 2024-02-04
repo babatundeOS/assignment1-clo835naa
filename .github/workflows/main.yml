@@ -43,11 +43,11 @@ jobs:
         echo "Mysql build complete"
 
         #push docker image to registory
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY_DB:"${IMAGE_TAG}"
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY_DB
         echo "Mysql push to ecr complete"
 
         # run mysql container
-        docker run -d -e MYSQL_ROOT_PASSWORD=pw $ECR_REGISTRY/$ECR_REPOSITORY_DB:"${IMAGE_TAG}"
+        docker run -d -e MYSQL_ROOT_PASSWORD=pw $ECR_REGISTRY/$ECR_REPOSITORY_DB
         echo "Showing list of databases in MYSQL:"
         docker exec mysql mysql -ppw -e "show databases;"
         echo "Mysql container complete"
