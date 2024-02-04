@@ -11,10 +11,6 @@ jobs:
     name: Build Image
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ${{ github.workspace }}/app
-
     steps:
 
     - name: Check out code
@@ -53,7 +49,8 @@ jobs:
         # run mysql container
         docker run -d --name mysql_db -e MYSQL_ROOT_PASSWORD=pw $ECR_REGISTRY/$ECR_REPOSITORY_DB
         docker ps
-        echo "Showing list of databases in MYSQL:"
+        echo "Sleep for 10s then... Showing list of databases in MYSQL:"
+        sleep 10
         docker exec mysql_db mysql -ppw -e "show databases;"
         echo "Mysql container complete"
 
